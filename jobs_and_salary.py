@@ -4,7 +4,7 @@ from terminaltables import AsciiTable
 from dotenv import load_dotenv
 
 
-def SuperJob_Moscow():
+def find_superjob_vacancy_moscow():
     table_data = [
         [
             'Язык программирования',
@@ -14,7 +14,7 @@ def SuperJob_Moscow():
         ]
     ]
 
-    for language, info in jobs_on_languages_superjob().items():
+    for language, info in find_jobs_on_languages_superjob().items():
         table_data.append([
             language,
             info["vacancies_found"],
@@ -27,7 +27,7 @@ def SuperJob_Moscow():
     print(table.table)
 
 
-def HeadHunter_Moscow():
+def find_headhunter_vacancy_moscow():
     table_data = [
         [
             'Язык программирования',
@@ -37,7 +37,7 @@ def HeadHunter_Moscow():
         ]
     ]
 
-    for language, info in jobs_on_languages_hh().items():
+    for language, info in find_jobs_on_languages_hh().items():
         table_data.append([
             language,
             info["vacancies_found"],
@@ -50,7 +50,7 @@ def HeadHunter_Moscow():
     print(table.table)
 
 
-def jobs_on_languages_hh():
+def find_jobs_on_languages_hh():
     jobs_on_languages_hh = dict()
     languages = [
         'JavaScript',
@@ -110,7 +110,7 @@ def jobs_on_languages_hh():
     return jobs_on_languages_hh
 
 
-def jobs_on_languages_superjob():
+def find_jobs_on_languages_superjob():
     load_dotenv()
     jobs_on_languages_superjob = dict()
     languages = [
@@ -179,5 +179,5 @@ def predict_rub_salary_for_superJob(vacancy):
 
 
 if __name__ == '__main__':
-    SuperJob_Moscow()
-    HeadHunter_Moscow()
+    find_superjob_vacancy_moscow()
+    find_headhunter_vacancy_moscow()
