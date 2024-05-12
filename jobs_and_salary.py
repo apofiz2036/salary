@@ -14,7 +14,9 @@ def find_superjob_vacancy_moscow():
         ]
     ]
 
-    for language, vacancies in find_jobs_on_languages_superjob().items():
+    vacancies_on_languages = find_jobs_on_languages_superjob()
+
+    for language, vacancies in vacancies_on_languages:
         columns_in_table.append([
             language,
             vacancies["vacancies_found"],
@@ -180,4 +182,4 @@ def predict_rub_salary_for_superJob(vacancy):
 
 if __name__ == '__main__':
     find_superjob_vacancy_moscow()
-    find_headhunter_vacancy_moscow()
+    # find_headhunter_vacancy_moscow()
