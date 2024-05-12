@@ -191,5 +191,5 @@ def predict_rub_salary_for_superJob(vacancy):
 if __name__ == '__main__':
     load_dotenv()
     secret_key = os.environ['SUPERJOB_SECRET_KEY']
-    # find_superjob_vacancy_moscow()
+    find_superjob_vacancy_moscow()
     find_headhunter_vacancy_moscow()
