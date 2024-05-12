@@ -14,9 +14,9 @@ def find_superjob_vacancy_moscow():
         ]
     ]
 
-    vacancies_on_languages = find_jobs_on_languages_superjob()
+    jobs_on_languages = find_jobs_on_languages_superjob()
 
-    for language, vacancies in vacancies_on_languages:
+    for language, vacancies in jobs_on_languages().items():
         columns_in_table.append([
             language,
             vacancies["vacancies_found"],
@@ -39,7 +39,9 @@ def find_headhunter_vacancy_moscow():
         ]
     ]
 
-    for language, vacancies in find_jobs_on_languages_hh().items():
+    jobs_on_languages = find_jobs_on_languages_hh()
+
+    for language, vacancies in jobs_on_languages.items():
         columns_in_table.append([
             language,
             vacancies["vacancies_found"],
@@ -113,14 +115,12 @@ def find_jobs_on_languages_hh():
 
 
 def find_jobs_on_languages_superjob():
-    load_dotenv()
     jobs_on_languages_superjob = dict()
     languages = [
         'JavaScript',
         'Java',
         'Python',
     ]
-    secret_key = os.environ['SUPERJOB_SECRET_KEY']
 
     for language in languages:
         url = '	https://api.superjob.ru/2.0/vacancies/'
@@ -181,5 +181,7 @@ def predict_rub_salary_for_superJob(vacancy):
 
 
 if __name__ == '__main__':
-    find_superjob_vacancy_moscow()
-    # find_headhunter_vacancy_moscow()
+    load_dotenv()
+    secret_key = os.environ['SUPERJOB_SECRET_KEY']
+    # find_superjob_vacancy_moscow()
+    find_headhunter_vacancy_moscow()
