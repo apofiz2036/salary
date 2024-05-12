@@ -84,7 +84,7 @@ def find_jobs_on_languages_hh():
             response.raise_for_status()
 
             vacancies_from_page = response.json()['items']
-            vacancies_found += len(vacancies_from_page)
+            vacancies_found = response.json()['found']
 
             for vacancy in vacancies_from_page:
                 salary = vacancy.get('salary')
@@ -150,7 +150,7 @@ def find_jobs_on_languages_superjob():
             response.raise_for_status()
 
             vacancies_from_page = response.json()['objects']
-            vacancies_found += len(vacancies_from_page)
+            vacancies_found = response.json()['found']
 
             if not vacancies_from_page:
                 break
@@ -178,9 +178,9 @@ def find_jobs_on_languages_superjob():
 
 
 def predict_rub_salary_for_superJob(vacancy):
-    if vacancy['payment_from'] == 0:
+    if not vacancy['payment_from']:
         return None
-    elif vacancy['payment_from'] != 0 and vacancy['payment_to'] != 0:
+    elif vacancy['payment_from'] and vacancy['payment_to']:
         return ((vacancy['payment_from']+vacancy['payment_to'])/2)
     else:
         return vacancy['payment_from']
@@ -189,5 +189,5 @@ def predict_rub_salary_for_superJob(vacancy):
 if __name__ == '__main__':
     load_dotenv()
     secret_key = os.environ['SUPERJOB_SECRET_KEY']
-    # find_superjob_vacancy_moscow()
+    find_superjob_vacancy_moscow()
     find_headhunter_vacancy_moscow()
