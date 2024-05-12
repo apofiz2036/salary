@@ -68,13 +68,16 @@ def find_jobs_on_languages_hh():
         vacancies_found = 0
         salaries = []
         page = 0
-
+        MOSCOW_AREA_ID = 1
+        DAYS_PERIOD = 30
+        VACANCIES_PER_PAGE = 100
+        
         while True:
             payload = {
                 'text': f'программист {language}',
-                'area': '1',
-                'period': '30',
-                'per_page': 100,
+                'area': MOSCOW_AREA_ID,
+                'period': DAYS_PERIOD,
+                'per_page': VACANCIES_PER_PAGE,
                 'page': page
             }
             response = requests.get(f'{url}', params=payload)
@@ -125,16 +128,19 @@ def find_jobs_on_languages_superjob():
     for language in languages:
         url = '	https://api.superjob.ru/2.0/vacancies/'
         page = 0
+        MOSCOW_TOWN_ID = 4
+        IT_VACANCY_CATEGORY = 48
+        VACANCIES_PER_PAGE = 100
         vacancies_processed = 0
         vacancies_found = 0
         salaries = []
 
         while True:
             payload = {
-                'town': 4,
-                'catalogues': 48,
+                'town': MOSCOW_TOWN_ID,
+                'catalogues': IT_VACANCY_CATEGORY,
                 'keyword': language,
-                'count': 100,
+                'count': VACANCIES_PER_PAGE,
                 'page': page
             }
             headers = {
