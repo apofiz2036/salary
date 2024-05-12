@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 
 def find_superjob_vacancy_moscow():
-    table_data = [
+    columns_in_table = [
         [
             'Язык программирования',
             'Вакансий найдено',
@@ -14,21 +14,21 @@ def find_superjob_vacancy_moscow():
         ]
     ]
 
-    for language, info in find_jobs_on_languages_superjob().items():
-        table_data.append([
+    for language, vacancies in find_jobs_on_languages_superjob().items():
+        columns_in_table.append([
             language,
-            info["vacancies_found"],
-            info["vacancies_processed"],
-            info["average_salary"]
+            vacancies["vacancies_found"],
+            vacancies["vacancies_processed"],
+            vacancies["average_salary"]
         ])
 
-    table = AsciiTable(table_data)
+    table = AsciiTable(columns_in_table)
     table.title = 'SuperJob Moscow'
     print(table.table)
 
 
 def find_headhunter_vacancy_moscow():
-    table_data = [
+    columns_in_table = [
         [
             'Язык программирования',
             'Вакансий найдено',
@@ -37,15 +37,15 @@ def find_headhunter_vacancy_moscow():
         ]
     ]
 
-    for language, info in find_jobs_on_languages_hh().items():
-        table_data.append([
+    for language, vacancies in find_jobs_on_languages_hh().items():
+        columns_in_table.append([
             language,
-            info["vacancies_found"],
-            info["vacancies_processed"],
-            info["average_salary"]
+            vacancies["vacancies_found"],
+            vacancies["vacancies_processed"],
+            vacancies["average_salary"]
         ])
 
-    table = AsciiTable(table_data)
+    table = AsciiTable(columns_in_table)
     table.title = 'HeadHunter Moscow'
     print(table.table)
 
