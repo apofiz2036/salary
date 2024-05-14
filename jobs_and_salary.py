@@ -82,17 +82,13 @@ def find_jobs_on_languages_hh():
             vacancies_found = vacancies_from_page['found']
 
             for vacancy in vacancies_from_page['items']:
-                salary = vacancy.get('salary')
-                if not salary:
-                    continue
-                elif salary['currency'] != 'RUR':
-                    continue
-                elif salary['from'] and salary['to']:
-                    salaries.append((salary['from']+salary['to'])/2)
-                elif salary['from'] and not salary['to']:
-                    salaries.append(salary['from']*1.2)
-                elif not salary['from'] and salary['to']:
-                    salaries.append(salary['to']*0.8)
+                salary_values = vacancy.get('salary')
+                if salary_values and salary_values.get('currency') == 'RUR':
+                    salary_from = salary_values.get('from')
+                    salary_to = salary_values.get('to')
+                    salary = predict_rub_salary(salary_from, salary_to)
+                    if salary:
+                        salaries.append(salary)
 
             if vacancies_from_page['pages'] == page + 1:
                 break
@@ -154,9 +150,12 @@ def find_jobs_on_languages_superjob(secret_key):
                 break
 
             for vacancy in vacancies_from_page:
-                salary = predict_rub_salary_for_superJob(vacancy)
-                if salary:
-                    salaries.append(salary)
+                salary_from = vacancy.get('payment_from')
+                salary_to = vacancy.get('payment_to')
+                if salary_from or salary_to:
+                    salary = predict_rub_salary(salary_from, salary_to)
+                    if salary:
+                        salaries.append(salary)
 
             page += 1
 
@@ -174,13 +173,15 @@ def find_jobs_on_languages_superjob(secret_key):
     return jobs_on_languages_superjob
 
 
-def predict_rub_salary_for_superJob(vacancy):
-    if vacancy['payment_from'] and vacancy['payment_to']:
-        return (vacancy['payment_from']+vacancy['payment_to'])/2
-    elif not vacancy['payment_from'] and vacancy['payment_to']:
-        return vacancy['payment_to']*0.8
-    elif vacancy['payment_from'] and not vacancy['payment_to']:
-        return vacancy['payment_from']*1.2
+def predict_rub_salary(salary_from, salary_to):
+    if not salary_from and not salary_to:
+        return None
+    if salary_from and salary_to:
+        return (salary_from + salary_to) / 2
+    elif salary_from and not salary_to:
+        return salary_from * 1.2
+    elif not salary_from and salary_to:
+        return salary_to * 0.8
 
 
 if __name__ == '__main__':
