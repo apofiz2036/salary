@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 
 def find_superjob_vacancy_moscow(jobs_on_languages_superjob):
-    columns_in_table = [
+    table_rows = [
         [
             'Язык программирования',
             'Вакансий найдено',
@@ -13,22 +13,22 @@ def find_superjob_vacancy_moscow(jobs_on_languages_superjob):
             'Средняя зарплата'
         ]
     ]
-    
+
     for language, vacancies in jobs_on_languages_superjob().items():
-        columns_in_table.append([
+        table_rows.append([
             language,
             vacancies["vacancies_found"],
             vacancies["vacancies_processed"],
             vacancies["average_salary"]
         ])
 
-    table = AsciiTable(columns_in_table)
+    table = AsciiTable(table_rows)
     table.title = 'SuperJob Moscow'
     print(table.table)
 
 
 def find_headhunter_vacancy_moscow(jobs_on_languages_hh):
-    columns_in_table = [
+    table_rows = [
         [
             'Язык программирования',
             'Вакансий найдено',
@@ -38,14 +38,14 @@ def find_headhunter_vacancy_moscow(jobs_on_languages_hh):
     ]
 
     for language, vacancies in jobs_on_languages_hh.items():
-        columns_in_table.append([
+        table_rows.append([
             language,
             vacancies["vacancies_found"],
             vacancies["vacancies_processed"],
             vacancies["average_salary"]
         ])
 
-    table = AsciiTable(columns_in_table)
+    table = AsciiTable(table_rows)
     table.title = 'HeadHunter Moscow'
     print(table.table)
 
@@ -129,7 +129,6 @@ def find_jobs_on_languages_superjob(secret_key):
         moscow_town_id = 4
         it_vacancy_category = 48
         vacancies_per_page = 100
-        vacancies_processed = 0
         vacancies_found = 0
         salaries = []
 
@@ -155,9 +154,8 @@ def find_jobs_on_languages_superjob(secret_key):
                 break
 
             for vacancy in vacancies_from_page:
-                vacancies_processed += 1
                 salary = predict_rub_salary_for_superJob(vacancy)
-                if not salary:
+                if salary:
                     salaries.append(salary)
 
             page += 1
@@ -169,7 +167,7 @@ def find_jobs_on_languages_superjob(secret_key):
 
         jobs_on_languages_superjob[language] = {
             'vacancies_found': vacancies_found,
-            'vacancies_processed': vacancies_processed,
+            'vacancies_processed': len(salaries),
             'average_salary': average_salary
         }
 
