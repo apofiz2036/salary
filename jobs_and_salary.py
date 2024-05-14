@@ -4,7 +4,7 @@ from terminaltables import AsciiTable
 from dotenv import load_dotenv
 
 
-def find_superjob_vacancy_moscow():
+def find_superjob_vacancy_moscow(jobs_on_languages_superjob):
     columns_in_table = [
         [
             'Язык программирования',
@@ -13,10 +13,8 @@ def find_superjob_vacancy_moscow():
             'Средняя зарплата'
         ]
     ]
-
-    jobs_on_languages = find_jobs_on_languages_superjob()
-
-    for language, vacancies in jobs_on_languages().items():
+    
+    for language, vacancies in jobs_on_languages_superjob().items():
         columns_in_table.append([
             language,
             vacancies["vacancies_found"],
@@ -29,7 +27,7 @@ def find_superjob_vacancy_moscow():
     print(table.table)
 
 
-def find_headhunter_vacancy_moscow():
+def find_headhunter_vacancy_moscow(jobs_on_languages_hh):
     columns_in_table = [
         [
             'Язык программирования',
@@ -39,9 +37,7 @@ def find_headhunter_vacancy_moscow():
         ]
     ]
 
-    jobs_on_languages = find_jobs_on_languages_hh()
-
-    for language, vacancies in jobs_on_languages.items():
+    for language, vacancies in jobs_on_languages_hh.items():
         columns_in_table.append([
             language,
             vacancies["vacancies_found"],
@@ -67,16 +63,16 @@ def find_jobs_on_languages_hh():
         vacancies_found = 0
         salaries = []
         page = 0
-        MOSCOW_AREA_ID = 1
-        DAYS_PERIOD = 30
-        VACANCIES_PER_PAGE = 100
+        moscow_area_id = 1
+        days_period = 30
+        vacancies_per_page = 100
 
         while True:
             payload = {
                 'text': f'программист {language}',
-                'area': MOSCOW_AREA_ID,
-                'period': DAYS_PERIOD,
-                'per_page': VACANCIES_PER_PAGE,
+                'area': moscow_area_id,
+                'period': days_period,
+                'per_page': vacancies_per_page,
                 'page': page
             }
             response = requests.get(f'{url}', params=payload)
@@ -87,7 +83,7 @@ def find_jobs_on_languages_hh():
 
             for vacancy in vacancies_from_page['items']:
                 salary = vacancy.get('salary')
-                if salary is None:
+                if not salary:
                     continue
                 elif salary['currency'] != 'RUR':
                     continue
@@ -119,7 +115,7 @@ def find_jobs_on_languages_hh():
     return jobs_on_languages_hh
 
 
-def find_jobs_on_languages_superjob():
+def find_jobs_on_languages_superjob(secret_key):
     jobs_on_languages_superjob = dict()
     languages = [
         'JavaScript',
@@ -130,19 +126,19 @@ def find_jobs_on_languages_superjob():
     for language in languages:
         url = '	https://api.superjob.ru/2.0/vacancies/'
         page = 0
-        MOSCOW_TOWN_ID = 4
-        IT_VACANCY_CATEGORY = 48
-        VACANCIES_PER_PAGE = 100
+        moscow_town_id = 4
+        it_vacancy_category = 48
+        vacancies_per_page = 100
         vacancies_processed = 0
         vacancies_found = 0
         salaries = []
 
         while True:
             payload = {
-                'town': MOSCOW_TOWN_ID,
-                'catalogues': IT_VACANCY_CATEGORY,
+                'town': moscow_town_id,
+                'catalogues': it_vacancy_category,
                 'keyword': language,
-                'count': VACANCIES_PER_PAGE,
+                'count': vacancies_per_page,
                 'page': page
             }
             headers = {
@@ -151,8 +147,9 @@ def find_jobs_on_languages_superjob():
             response = requests.get(url, headers=headers, params=payload)
             response.raise_for_status()
 
-            vacancies_from_page = response.json()['objects']
-            vacancies_found = response.json()['found']
+            vacancies_response = response.json()
+            vacancies_from_page = vacancies_response['objects']
+            vacancies_found = vacancies_response['found']
 
             if not vacancies_from_page:
                 break
@@ -160,7 +157,7 @@ def find_jobs_on_languages_superjob():
             for vacancy in vacancies_from_page:
                 vacancies_processed += 1
                 salary = predict_rub_salary_for_superJob(vacancy)
-                if salary is not None:
+                if not salary:
                     salaries.append(salary)
 
             page += 1
@@ -191,5 +188,7 @@ def predict_rub_salary_for_superJob(vacancy):
 if __name__ == '__main__':
     load_dotenv()
     secret_key = os.environ['SUPERJOB_SECRET_KEY']
-    find_superjob_vacancy_moscow()
-    find_headhunter_vacancy_moscow()
+    # jobs_on_languages_superjob = find_jobs_on_languages_superjob(secret_key)
+    # find_superjob_vacancy_moscow(jobs_on_languages_superjob)
+    jobs_on_languages_hh = find_jobs_on_languages_hh()
+    find_headhunter_vacancy_moscow(jobs_on_languages_hh)
