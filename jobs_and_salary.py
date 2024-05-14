@@ -97,14 +97,9 @@ def find_jobs_on_languages_hh():
 
         job_and_salary = {
             'vacancies_found': vacancies_found,
-            'vacancies_processed': len(salaries)
+            'vacancies_processed': len(salaries),
+            'average_salary': int(sum(salaries) / len(salaries)) if salaries else 0
         }
-
-        if salaries:
-            job_and_salary['average_salary'] = int(
-                sum(salaries) / len(salaries))
-        else:
-            job_and_salary['average_salary'] = 0
 
         jobs_on_languages_hh[language] = job_and_salary
 
