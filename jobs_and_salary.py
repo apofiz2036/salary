@@ -4,7 +4,7 @@ from terminaltables import AsciiTable
 from dotenv import load_dotenv
 
 
-def find_superjob_vacancy_moscow(jobs_on_languages_superjob):
+def create_table_superjob(jobs_on_languages_superjob):
     table_rows = [
         [
             'Язык программирования',
@@ -24,10 +24,10 @@ def find_superjob_vacancy_moscow(jobs_on_languages_superjob):
 
     table = AsciiTable(table_rows)
     table.title = 'SuperJob Moscow'
-    print(table.table)
+    return table.table
 
 
-def find_headhunter_vacancy_moscow(jobs_on_languages_hh):
+def create_table_hh(jobs_on_languages_hh):
     table_rows = [
         [
             'Язык программирования',
@@ -47,7 +47,7 @@ def find_headhunter_vacancy_moscow(jobs_on_languages_hh):
 
     table = AsciiTable(table_rows)
     table.title = 'HeadHunter Moscow'
-    print(table.table)
+    return table.table
 
 
 def find_jobs_on_languages_hh():
@@ -183,6 +183,7 @@ if __name__ == '__main__':
     load_dotenv()
     secret_key = os.environ['SUPERJOB_SECRET_KEY']
     # jobs_on_languages_superjob = find_jobs_on_languages_superjob(secret_key)
-    # find_superjob_vacancy_moscow(jobs_on_languages_superjob)
+    # print(create_table_superjob(jobs_on_languages_superjob))
+
     jobs_on_languages_hh = find_jobs_on_languages_hh()
-    find_headhunter_vacancy_moscow(jobs_on_languages_hh)
+    print(create_table_hh(jobs_on_languages_hh))
