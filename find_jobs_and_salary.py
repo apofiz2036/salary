@@ -1,53 +1,8 @@
 import requests
-import os
-from terminaltables import AsciiTable
 from dotenv import load_dotenv
 
 
-def create_table_superjob(jobs_on_languages_superjob):
-    table_rows = [
-        [
-            'Язык программирования',
-            'Вакансий найдено',
-            'Вакансий обработано',
-            'Средняя зарплата'
-        ]
-    ]
-
-    for language, vacancies in jobs_on_languages_superjob().items():
-        table_rows.append([
-            language,
-            vacancies["vacancies_found"],
-            vacancies["vacancies_processed"],
-            vacancies["average_salary"]
-        ])
-
-    table = AsciiTable(table_rows)
-    table.title = 'SuperJob Moscow'
-    return table.table
-
-
-def create_table_hh(jobs_on_languages_hh):
-    table_rows = [
-        [
-            'Язык программирования',
-            'Вакансий найдено',
-            'Вакансий обработано',
-            'Средняя зарплата'
-        ]
-    ]
-
-    for language, vacancies in jobs_on_languages_hh.items():
-        table_rows.append([
-            language,
-            vacancies["vacancies_found"],
-            vacancies["vacancies_processed"],
-            vacancies["average_salary"]
-        ])
-
-    table = AsciiTable(table_rows)
-    table.title = 'HeadHunter Moscow'
-    return table.table
+load_dotenv()
 
 
 def find_jobs_on_languages_hh():
@@ -177,13 +132,3 @@ def predict_rub_salary(salary_from, salary_to):
         return salary_from * 1.2
     elif not salary_from and salary_to:
         return salary_to * 0.8
-
-
-if __name__ == '__main__':
-    load_dotenv()
-    secret_key = os.environ['SUPERJOB_SECRET_KEY']
-    # jobs_on_languages_superjob = find_jobs_on_languages_superjob(secret_key)
-    # print(create_table_superjob(jobs_on_languages_superjob))
-
-    jobs_on_languages_hh = find_jobs_on_languages_hh()
-    print(create_table_hh(jobs_on_languages_hh))
