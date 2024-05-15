@@ -19,7 +19,7 @@ SUPERJOB_SECRET_KEY==ваш ключ
 Для работы программы требуется прописать следующую команду в консоли:
 
 ```shell
-python jobs_and_salary.py
+python jobs_and_salary_table.py
 ```
 
 Дополнительные параметры не требуются.
