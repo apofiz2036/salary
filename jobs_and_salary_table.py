@@ -14,7 +14,7 @@ def create_table(table, title):
         ]
     ]
 
-    for language, vacancies in table().items():
+    for language, vacancies in table.items():
         table_rows.append([
             language,
             vacancies["vacancies_found"],
