@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from terminaltables import AsciiTable
 import find_jobs_and_salary as find
 
@@ -51,6 +52,7 @@ def create_table_hh(table):
 
 if __name__ == '__main__':
     secret_key = os.environ['SUPERJOB_SECRET_KEY']
+    load_dotenv()
 
     table_hh = find.find_jobs_on_languages_hh()
     table_superjob = find.find_jobs_on_languages_superjob(secret_key)

@@ -1,8 +1,4 @@
 import requests
-from dotenv import load_dotenv
-
-
-load_dotenv()
 
 
 def find_jobs_on_languages_hh():
