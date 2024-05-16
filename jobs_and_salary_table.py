@@ -3,8 +3,7 @@ from terminaltables import AsciiTable
 import find_jobs_and_salary as find
 
 
-def create_table_superjob(secret_key):
-    table = find.find_jobs_on_languages_superjob(secret_key)
+def create_table_superjob(table):
     table_rows = [
         [
             'Язык программирования',
@@ -27,8 +26,7 @@ def create_table_superjob(secret_key):
     return table.table
 
 
-def create_table_hh():
-    table = find.find_jobs_on_languages_hh()
+def create_table_hh(table):
     table_rows = [
         [
             'Язык программирования',
@@ -53,5 +51,9 @@ def create_table_hh():
 
 if __name__ == '__main__':
     secret_key = os.environ['SUPERJOB_SECRET_KEY']
-    print(create_table_hh())
-    print(create_table_superjob(secret_key))
+
+    table_hh = find.find_jobs_on_languages_hh()
+    table_superjob = find.find_jobs_on_languages_superjob(secret_key)
+
+    print(create_table_hh(table_hh))
+    print(create_table_superjob(secret_key, table_superjob))
